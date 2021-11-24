@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/32dbb816cd.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Cookie&family=Poppins:ital,wght@0,300;0,700;1,600&display=swap" rel="stylesheet">
+    <title>Link shortener</title>
+</head>
+<body>
+    
+    <div class="logo">
+        <img src="logo.png" alt="logo">
+    </div>
+
+    <div class="container">
+        
+
+        <div class="content">
+        <h1>Shorten your link! </h1>
+        <h4>Made by Krystian Krupka</h4>
+    <input type="text" id="source-link" placeholder="Put your link here!">
+   <div class="button-container"> <button id="generate-button">Generate!</button> </div>
+    <div class="link">Short link option 1: <span id="full-short-link"></span></div>
+    <div class="link">Short link option 2: <span id="full-short-link2"></span></div>
+    <div class="link">Short link option 3: <span id="full-short-link3"></span></div>
+    </div></div>
+
+    <script>
+        window.onload = function() {
+            document.getElementById("generate-button")
+                    .addEventListener("click", generateLinks);
+        }
+
+        function generateLinks() {
+            let url = document.getElementById("source-link").value;
+            fetch("https://api.shrtco.de/v2/shorten?url="+url)
+            .then( response => response.json() )
+            .then( data => linksReady(data) );
+        }
+
+        function linksReady(data) {
+            console.log(data);
+            let result = data.result;
+            setLinkToDomEl("full-short-link", result.code);
+            setLinkToDomEl("full-short-link", result.full_short_link);
+            setLinkToDomEl("full-short-link2", result.full_short_link2);
+            setLinkToDomEl("full-short-link3", result.full_short_link3);
+        }
+
+        function setLinkToDomEl(id, shortUrl) {
+            document.getElementById(id).innerHTML
+            = "<a href='"+shortUrl+"'>"+shortUrl+"</a>";
+        }
+    </script>
+</body>
+</html>
